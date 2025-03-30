@@ -2,89 +2,97 @@
 #include <string.h>
 #include <wchar.h>
 #include <wctype.h> 
+typedef struct {
+    char codigo[10];
+    char nome[100];
+    int periodo;
+    char prerequisitos[100];
+} Disciplina;
 
-// funcao para converter as letras em números
-int valor_letra(wchar_t letra) {
-    switch (letra) {
-        case L'q': return 1; case L'w': return 6; case L'e': return 7;
-        case L'r': return 6; case L't': return 5; case L'y': return 2;
-        case L'u': return 3; case L'i': return 8; case L'o': return 9;
-        case L'p': return 4; case L'a': return 2; case L's': return 5;
-        case L'd': return 8; case L'f': return 7; case L'g': return 4;
-        case L'h': return 1; case L'j': return 4; case L'k': return 7;
-        case L'l': return 8; case L'ç': return 5; case L'é': return 2;
-        case L'z': return 3; case L'x': return 4; case L'c': return 9;
-        case L'v': return 8; case L'b': return 3; case L'n': return 2;
-        case L'm': return 5; case L'ó': return 6; case L'õ': return 7;
-        case L'ô': return 6; case L'â': return 1; case L'ê': return 2;
-        case L'í': return 3; case L' ': return 0; 
-        default: return 0;
-    }
-}
+void verificarMaterias(int periodoAtual) {
+    Disciplina disciplinas[] = {
+        {"COMP359", "Programação 1", 1, "Nenhum"},
+        {"COMP360", "Lógica para Computação", 1, "Nenhum"},
+        {"COMP361", "Computação, Sociedade e Ética", 1, "Nenhum"},
+        {"COMP362", "Matemática Discreta", 1, "Nenhum"},
+        {"COMP363", "Cálculo Diferencial e Integral", 1, "Nenhum"},
+        {"COMP364", "Estrutura de Dados", 2, "COMP359"},
+        {"COMP365", "Banco de Dados", 2, "Nenhum"},
+        {"COMP366", "Organização e Arquitetura de Computadores", 2, "Nenhum"},
+        {"COMP367", "Geometria Analítica", 2, "Nenhum"},
+        {"COMP368", "Redes de Computadores", 3, "COMP359"},
+        {"COMP369", "Teoria dos Grafos", 3, "COMP364 e COMP362"},
+        {"COMP370", "Probabilidade e Estatística", 3, "COMP363"},
+        {"COMP371", "Álgebra Linear", 3, "COMP367"},
+        {"COMP372", "Programação 2", 4, "COMP364, COMP365 e COMP368"},
+        {"COMP373", "Programação 3", 4, "COMP364, COMP365 e COMP368"},
+        {"COMP374", "Projeto e Análise de Algoritmos", 4, "COMP364 e COMP369"},
+        {"COMP376", "Teoria da Computação", 4, "Nenhum"},
+        {"COMP378", "Sistemas Operacionais", 5, "COMP366"},
+        {"COMP379", "Compiladores", 5, "COMP364 e COMP376"},
+        {"COMP380", "Inteligência Artificial", 5, "COMP360 e COMP364"},
+        {"COMP381", "Computação Gráfica", 5, "Nenhum"},
+        {"COMP382", "Projeto e Desenvolvimento de Sistemas", 6, "Todas as disciplinas do 1º ao 5º período"},
+        {"COMP386", "Metodologia de Pesquisa e Trabalho Individual", 7, "Nenhum"},
+        {"COMP387", "Noções de Direito", 7, "Nenhum"}
+    };
 
-// funcao que realiza a operação com os números e retorna 0, 1 ou 2
-int operacao(int numeros[], int tamanho) {
-    int soma = 0;
-    for (int i = 0; i < tamanho; i++) {
-        soma += numeros[i];
-    }
-    printf("Soma %d\n", soma);
-    return soma % 3;
-}
+    int totalDisciplinas = sizeof(disciplinas) / sizeof(disciplinas[0]);
 
-// separar o nome e calcular soma por parte
-void separarNome(wchar_t nome[], int numeros[], int tamanho) {
-    printf("\nPartes do nome separadas com suas somas:\n");
-    
-    int inicio = 0;
-    int encontrouPalavra = 0;
-    int somaParcial = 0;
-    
-    for (int i = 0; i < tamanho; i++) {
-        if (numeros[i] == 0) { // ee encontrou um espaço (0)
-            if (encontrouPalavra) {
-                wprintf(L"%.*ls (Soma: %d)\n", i - inicio, &nome[inicio], somaParcial);
-            }
-            encontrouPalavra = 0;
-            inicio = i + 1; // atualiza para a proxima palavra
-            somaParcial = 0; 
-        } else {
-            encontrouPalavra = 1;
-            somaParcial += numeros[i];
+    printf("Disciplinas recomendadas para o %dº período:\n", periodoAtual);
+    for (int i = 0; i < totalDisciplinas; i++) {
+        if (disciplinas[i].periodo == periodoAtual) {
+            printf("Código: %s | Nome: %s | Pré-requisitos: %s\n",
+                   disciplinas[i].codigo, disciplinas[i].nome, disciplinas[i].prerequisitos);
         }
     }
-    
-    // caso sobre um nome sobrando
-    if (encontrouPalavra) {
-        wprintf(L"%ls (Soma: %d)\n", &nome[inicio], somaParcial);
-    }
 }
 
-int main() {
-    int numeros[50];
-    wchar_t nome[50]; 
+/*
 
-    printf("Digite seu nome: ");
-    fgetws(nome, sizeof(nome) / sizeof(wchar_t), stdin);
-    nome[wcslen(nome) - 1] = L'\0'; 
+Limite máximo de disciplinas por semestre.      ---> 8 materias
 
-    int tamanho = wcslen(nome);
+Tempo para concluir o curso.                    ---> tempo médio 
 
-    printf("Letras do nome:\n");
-    for (int i = 0; i < tamanho; i++) {
-        wprintf(L"Letras[%d] = %lc\n", i, nome[i]);
-        numeros[i] = valor_letra(towlower(nome[i]));
-    }
+Escolha da ênfase.                              ---> nenhuma ênfase
 
-    printf("Numeros convertidos:\n");
-    for (int i = 0; i < tamanho; i++) {
-        printf("Numeros[%d] = %d\n", i, numeros[i]);
-    }
+Critério de seleção das disciplinas.            ---> ate  3 disciplinas por dia, mais deve ir todos os dias a ufal
 
-    int resultado = operacao(numeros, tamanho); 
 
-    separarNome(nome, numeros, tamanho);
 
-    printf("Resto da divisao da soma por 3: %d\n", resultado);
-    return 0;
-}
+        Fluxo de materias do curso de Ciência da Computação da UFAL
+
+Código da Disciplina | Nome da Disciplina                     | Período | Pré-requisito
+---------------------|--------------------------------------|---------|---------------------------------
+COMP359              | Programação 1                                | 1º      | Nenhum
+COMP360              | Lógica para Computação                       | 1º      | Nenhum
+COMP361              | Computação, Sociedade e Ética                | 1º      | Nenhum
+COMP362              | Matemática Discreta                          | 1º      | Nenhum
+COMP363              | Cálculo Diferencial e Integral               | 1º      | Nenhum
+-----------------------------------------------------------------------------------------------------------      
+COMP364              | Estrutura de Dados                     | 2º      | COMP359 (Programação 1)
+COMP365              | Banco de Dados                         | 2º      | Nenhum
+COMP366              | Organização e Arquitetura de Computadores| 2º      | Nenhum
+COMP367              | Geometria Analítica                    | 2º      | Nenhum
+-----------------------------------------------------------------------------------------------------------
+COMP368              | Redes de Computadores                  | 3º      | COMP359 (Programação 1)
+COMP369              | Teoria dos Grafos                      | 3º      | COMP364 e COMP362
+COMP370              | Probabilidade e Estatística            | 3º      | COMP363
+COMP371              | Álgebra Linear                         | 3º      | COMP367
+-----------------------------------------------------------------------------------------------------------
+COMP372              | Programação 2                          | 4º      | COMP364, COMP365 e COMP368
+COMP373              | Programação 3                          | 4º      | COMP364, COMP365 e COMP368
+COMP374              | Projeto e Análise de Algoritmos        | 4º      | COMP364 e COMP369
+COMP376              | Teoria da Computação                   | 4º      | Nenhum
+-----------------------------------------------------------------------------------------------------------
+COMP378              | Sistemas Operacionais                  | 5º      | COMP366
+COMP379              | Compiladores                           | 5º      | COMP364 e COMP376
+COMP380              | Inteligência Artificial                | 5º      | COMP360 e COMP364
+COMP381              | Computação Gráfica                     | 5º      | Nenhum
+-----------------------------------------------------------------------------------------------------------
+COMP382              | Projeto e Desenvolvimento de Sistemas  | 6º      | Todas as disciplinas do 1º ao 5º período
+-----------------------------------------------------------------------------------------------------------
+COMP386              | Metodologia de Pesquisa e Trabalho Individual| 7º      | Nenhum
+COMP387              | Noções de Direito                      | 7º      | Nenhum
+
+*/
