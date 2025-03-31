@@ -2,6 +2,24 @@
 #include <string.h>
 #include <wchar.h>
 #include <wctype.h> 
+#include <locale.h>
+
+int main() {
+    setlocale(LC_ALL, "");
+    int periodoAtual;
+    printf("Digite o período atual (1 a 7): ");
+    scanf("%d", &periodoAtual);
+
+    if (periodoAtual < 1 || periodoAtual > 7) {
+        printf("Período inválido. Por favor, insira um valor entre 1 e 7.\n");
+        return 1;
+    }
+
+    verificarMaterias(periodoAtual);
+
+    return 0;
+}
+
 typedef struct {
     char codigo[10];
     char nome[100];
