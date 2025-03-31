@@ -1,116 +1,146 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <wchar.h>
-#include <wctype.h> 
 #include <locale.h>
 
-int main() {
-    setlocale(LC_ALL, "");
-    int periodoAtual;
-    printf("Digite o período atual (1 a 7): ");
-    scanf("%d", &periodoAtual);
-
-    if (periodoAtual < 1 || periodoAtual > 7) {
-        printf("Período inválido. Por favor, insira um valor entre 1 e 7.\n");
-        return 1;
-    }
-
-    verificarMaterias(periodoAtual);
-
-    return 0;
-}
-
 typedef struct {
-    char codigo[10];
+    int codigo;
     char nome[100];
     int periodo;
-    char prerequisitos[100];
+    int prerequisitos[20];
+    int totalPrerequisitos;
 } Disciplina;
 
-void verificarMaterias(int periodoAtual) {
-    Disciplina disciplinas[] = {
-        {"COMP359", "Programação 1", 1, "Nenhum"},
-        {"COMP360", "Lógica para Computação", 1, "Nenhum"},
-        {"COMP361", "Computação, Sociedade e Ética", 1, "Nenhum"},
-        {"COMP362", "Matemática Discreta", 1, "Nenhum"},
-        {"COMP363", "Cálculo Diferencial e Integral", 1, "Nenhum"},
-        {"COMP364", "Estrutura de Dados", 2, "COMP359"},
-        {"COMP365", "Banco de Dados", 2, "Nenhum"},
-        {"COMP366", "Organização e Arquitetura de Computadores", 2, "Nenhum"},
-        {"COMP367", "Geometria Analítica", 2, "Nenhum"},
-        {"COMP368", "Redes de Computadores", 3, "COMP359"},
-        {"COMP369", "Teoria dos Grafos", 3, "COMP364 e COMP362"},
-        {"COMP370", "Probabilidade e Estatística", 3, "COMP363"},
-        {"COMP371", "Álgebra Linear", 3, "COMP367"},
-        {"COMP372", "Programação 2", 4, "COMP364, COMP365 e COMP368"},
-        {"COMP373", "Programação 3", 4, "COMP364, COMP365 e COMP368"},
-        {"COMP374", "Projeto e Análise de Algoritmos", 4, "COMP364 e COMP369"},
-        {"COMP376", "Teoria da Computação", 4, "Nenhum"},
-        {"COMP378", "Sistemas Operacionais", 5, "COMP366"},
-        {"COMP379", "Compiladores", 5, "COMP364 e COMP376"},
-        {"COMP380", "Inteligência Artificial", 5, "COMP360 e COMP364"},
-        {"COMP381", "Computação Gráfica", 5, "Nenhum"},
-        {"COMP382", "Projeto e Desenvolvimento de Sistemas", 6, "Todas as disciplinas do 1º ao 5º período"},
-        {"COMP386", "Metodologia de Pesquisa e Trabalho Individual", 7, "Nenhum"},
-        {"COMP387", "Noções de Direito", 7, "Nenhum"}
-    };
+void listarTodasMaterias(Disciplina disciplinas[], int totalDisciplinas) {
+    printf("Lista de todas as materias:\n");
+    for (int i = 0; i < totalDisciplinas; i++) {
+        printf("Codigo: %d | Nome: %s | Periodo: %d\n", disciplinas[i].codigo, disciplinas[i].nome, disciplinas[i].periodo);
+    }
+}
 
-    int totalDisciplinas = sizeof(disciplinas) / sizeof(disciplinas[0]);
+void selecionarMaterias(Disciplina disciplinas[], int totalDisciplinas, int periodoAtual, int materiasCursadas[], int totalCursadas) {
+    printf("Disciplinas recomendadas para o %d periodo:\n", periodoAtual);
+    int materiasSelecionadas[100];
+    int totalSelecionadas = 0;
 
-    printf("Disciplinas recomendadas para o %dº período:\n", periodoAtual);
     for (int i = 0; i < totalDisciplinas; i++) {
         if (disciplinas[i].periodo == periodoAtual) {
-            printf("Código: %s | Nome: %s | Pré-requisitos: %s\n",
-                   disciplinas[i].codigo, disciplinas[i].nome, disciplinas[i].prerequisitos);
+            int podeCursar = 1;
+            for (int j = 0; j < disciplinas[i].totalPrerequisitos; j++) {
+                int prerequisitoAtendido = 0;
+                for (int k = 0; k < totalCursadas; k++) {
+                    if (disciplinas[i].prerequisitos[j] == materiasCursadas[k]) {
+                        prerequisitoAtendido = 1;
+                        break;
+                    }
+                }
+                if (!prerequisitoAtendido) {
+                    podeCursar = 0;
+                    break;
+                }
+            }
+            if (podeCursar) {
+                printf("Codigo: %d | Nome: %s\n", disciplinas[i].codigo, disciplinas[i].nome);
+            }
+        }
+    }
+
+    printf("Digite os codigos das materias que deseja cursar (digite -1 para finalizar):\n");
+    while (1) {
+        int codigo;
+        scanf("%d", &codigo);
+        if (codigo == -1) {
+            break;
+        }
+        int encontrado = 0;
+        for (int i = 0; i < totalDisciplinas; i++) {
+            if (disciplinas[i].codigo == codigo && disciplinas[i].periodo == periodoAtual) {
+                encontrado = 1;
+                materiasSelecionadas[totalSelecionadas++] = codigo;
+                break;
+            }
+        }
+        if (!encontrado) {
+            printf("Codigo invalido ou nao recomendado para este periodo. Tente novamente.\n");
+        }
+    }
+
+    printf("Materias selecionadas:\n");
+    for (int i = 0; i < totalSelecionadas; i++) {
+        for (int j = 0; j < totalDisciplinas; j++) {
+            if (disciplinas[j].codigo == materiasSelecionadas[i]) {
+                printf("Codigo: %d | Nome: %s\n", disciplinas[j].codigo, disciplinas[j].nome);
+                break;
+            }
         }
     }
 }
 
-/*
+void obterMateriasCursadas(int materiasCursadas[], int *totalCursadas) {
+    printf("Digite os codigos das materias ja cursadas (digite -1 para finalizar):\n");
+    while (1) {
+        int codigo;
+        scanf("%d", &codigo);
+        if (codigo == -1) {
+            break;
+        }
+        materiasCursadas[(*totalCursadas)++] = codigo;
+    }
+}
 
-Limite máximo de disciplinas por semestre.      ---> 8 materias
+int obterPeriodoAtual() {
+    int periodoAtual;
+    printf("Digite o periodo atual (1 a 7): ");
+    scanf("%d", &periodoAtual);
 
-Tempo para concluir o curso.                    ---> tempo médio 
+    if (periodoAtual < 1 || periodoAtual > 7) {
+        printf("Periodo invalido. Por favor, insira um valor entre 1 e 7.\n");
+        exit(1);
+    }
+    return periodoAtual;
+}
 
-Escolha da ênfase.                              ---> nenhuma ênfase
+int main() {
+    setlocale(LC_ALL, "");
 
-Critério de seleção das disciplinas.            ---> ate  3 disciplinas por dia, mais deve ir todos os dias a ufal
+    Disciplina disciplinas[] = {
+        {359, "Programacao 1", 1, {}, 0},
+        {360, "Logica para Computacao", 1, {}, 0},
+        {361, "Computacao, Sociedade e Etica", 1, {}, 0},
+        {362, "Matematica Discreta", 1, {}, 0},
+        {363, "Calculo Diferencial e Integral", 1, {}, 0},
+        {364, "Estrutura de Dados", 2, {359}, 1},
+        {365, "Banco de Dados", 2, {}, 0},
+        {366, "Organizacao e Arquitetura de Computadores", 2, {}, 0},
+        {367, "Geometria Analitica", 2, {}, 0},
+        {368, "Redes de Computadores", 3, {359}, 1},
+        {369, "Teoria dos Grafos", 3, {364, 362}, 2},
+        {370, "Probabilidade e Estatistica", 3, {363}, 1},
+        {371, "Algebra Linear", 3, {367}, 1},
+        {372, "Programacao 2", 4, {364, 365, 368}, 3},
+        {373, "Programacao 3", 4, {364, 365, 368}, 3},
+        {376, "Teoria da Computacao", 4, {}, 0},
+        {378, "Sistemas Operacionais", 5, {366}, 1},
+        {379, "Compiladores", 5, {364, 376}, 2},
+        {380, "Inteligencia Artificial", 5, {360, 364}, 2},
+        {381, "Computacao Grafica", 5, {}, 0},
+        {382, "Projeto e Desenvolvimento de Sistemas", 6, {359,360,361,362,364,365,366,367,368,369,370,371,372,373,376,378,379,380,381}, 19},
+        {386, "Metodologia de Pesquisa e Trabalho Individual", 7, {}, 0},
+        {387, "Nocoes de Direito", 7, {}, 0}
+    };
 
+    int totalDisciplinas = sizeof(disciplinas) / sizeof(disciplinas[0]);
 
+    listarTodasMaterias(disciplinas, totalDisciplinas);
 
-        Fluxo de materias do curso de Ciência da Computação da UFAL
+    int materiasCursadas[100];
+    int totalCursadas = 0;
 
-Código da Disciplina | Nome da Disciplina                     | Período | Pré-requisito
----------------------|--------------------------------------|---------|---------------------------------
-COMP359              | Programação 1                                | 1º      | Nenhum
-COMP360              | Lógica para Computação                       | 1º      | Nenhum
-COMP361              | Computação, Sociedade e Ética                | 1º      | Nenhum
-COMP362              | Matemática Discreta                          | 1º      | Nenhum
-COMP363              | Cálculo Diferencial e Integral               | 1º      | Nenhum
------------------------------------------------------------------------------------------------------------      
-COMP364              | Estrutura de Dados                     | 2º      | COMP359 (Programação 1)
-COMP365              | Banco de Dados                         | 2º      | Nenhum
-COMP366              | Organização e Arquitetura de Computadores| 2º      | Nenhum
-COMP367              | Geometria Analítica                    | 2º      | Nenhum
------------------------------------------------------------------------------------------------------------
-COMP368              | Redes de Computadores                  | 3º      | COMP359 (Programação 1)
-COMP369              | Teoria dos Grafos                      | 3º      | COMP364 e COMP362
-COMP370              | Probabilidade e Estatística            | 3º      | COMP363
-COMP371              | Álgebra Linear                         | 3º      | COMP367
------------------------------------------------------------------------------------------------------------
-COMP372              | Programação 2                          | 4º      | COMP364, COMP365 e COMP368
-COMP373              | Programação 3                          | 4º      | COMP364, COMP365 e COMP368
-COMP374              | Projeto e Análise de Algoritmos        | 4º      | COMP364 e COMP369
-COMP376              | Teoria da Computação                   | 4º      | Nenhum
------------------------------------------------------------------------------------------------------------
-COMP378              | Sistemas Operacionais                  | 5º      | COMP366
-COMP379              | Compiladores                           | 5º      | COMP364 e COMP376
-COMP380              | Inteligência Artificial                | 5º      | COMP360 e COMP364
-COMP381              | Computação Gráfica                     | 5º      | Nenhum
------------------------------------------------------------------------------------------------------------
-COMP382              | Projeto e Desenvolvimento de Sistemas  | 6º      | Todas as disciplinas do 1º ao 5º período
------------------------------------------------------------------------------------------------------------
-COMP386              | Metodologia de Pesquisa e Trabalho Individual| 7º      | Nenhum
-COMP387              | Noções de Direito                      | 7º      | Nenhum
+    obterMateriasCursadas(materiasCursadas, &totalCursadas);
 
-*/
+    int periodoAtual = obterPeriodoAtual();
+
+    selecionarMaterias(disciplinas, totalDisciplinas, periodoAtual, materiasCursadas, totalCursadas);
+
+    return 0;
+}
