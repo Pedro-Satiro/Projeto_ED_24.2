@@ -1,3 +1,65 @@
+/* 
+Nome : Pedro Henrique Sátiro Correia
+
+Regras:::
+
+limite máximo de disciplinas por semestre é 8.
+O aluno deve concluir o curso em tempo médio possível.
+nenhuma ênfase
+o aluno não deve extrapola o limite de 3 disciplinas no máximo por dia, mais deve ir todos os dias a ufal
+
+*/ 
+
+
+
+
+/*
+        Fluxo de materias do curso de Ciência da Computação da UFAL
+
+ 1 Periodo: 
+ Programação 1                  359
+Lógica para Computação          360
+Computação, Sociedade e Ética   361
+Matemática Discreta             362
+Cálculo Diferencial e Integral  363
+
+
+2 Periodo:
+Estrutura de Dados 1            364
+Banco de Dados 1                365
+OAC                             366
+Geometria Analítica             367
+
+3 Periodo:
+Redes de Computadores           368
+Teoria dos Grafos               369
+Probabilidade e Estatística     370
+Álgebra Linear                  371 
+
+4 Periodo:
+Programação 2                   372
+Programação 3                   373
+Projeto e Análise de Algoritmos 374
+Teoria da Computação            375
+
+5 Periodo:
+Sistemas Operacionais           378
+Compiladores                    379
+Inteligência Artificial         380
+Computação Gráfica              381
+
+6 Periodo:
+Projeto e Desenvolvimento de Sistemas 382
+
+7 Periodo:
+Metodologia de Pesquisa e Trabalho Individual 386
+Noções de Direito               387
+
+
+*/
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -52,13 +114,13 @@ void selecionarMaterias(Disciplina disciplinas[], int totalDisciplinas, int peri
         }
     }
 
-    printf("Digite os codigos das materias que deseja cursar (-1 para finalizar):\n");
+    printf("Digite os codigos das materias que deseja cursar (-1 para finalizar) (use 1 materia por linha):\n");
     while (1) {
         if (totalSelecionadas >= 8) {
             printf("Voce atingiu o limite maximo de 8 materias por periodo.\n"); // 1 Regra 
             break;
         }
-
+        
         int codigo;
         scanf("%d", &codigo);
         if (codigo == -1) {
@@ -75,6 +137,11 @@ void selecionarMaterias(Disciplina disciplinas[], int totalDisciplinas, int peri
         if (!encontrado) {
             printf("Codigo invalido ou nao recomendado para este periodo. Tente novamente.\n");
         }
+    }
+
+    if (totalSelecionadas == 0) {
+        printf("Voce deve selecionar pelo menos uma materia.\n");
+        exit(1);
     }
 
     printf("Materias selecionadas:\n");
@@ -144,6 +211,42 @@ int verificaDiasMatricula(Disciplina disciplinas[]) {
     return 1; // Retorne o valor apropriado
 }
 
+int verificarFormaturaEm8Periodos(Disciplina disciplinas[], int totalDisciplinas, int materiasCursadas[], int totalCursadas, int periodoAtual) {
+    int totalRestantes = 0;
+    int materiasRestantes[50];
+
+    for (int i = 0; i < totalDisciplinas; i++) {
+        int jaCursada = 0;
+        for (int j = 0; j < totalCursadas; j++) {
+            if (disciplinas[i].codigo == materiasCursadas[j]) {
+                jaCursada = 1;
+                break;
+            }
+        }
+        if (!jaCursada) {
+            materiasRestantes[totalRestantes++] = disciplinas[i].codigo;
+        }
+    }
+
+    int periodosRestantes = 8 - periodoAtual;
+    if (periodosRestantes <= 0) {
+        printf("Erro: Já está no último período ou além do limite de 8 períodos.\n");
+        return 0;
+    }
+
+    int maxMateriasPorPeriodo = 8;
+    int materiasPorPeriodo = (totalRestantes + periodosRestantes - 1) / periodosRestantes; // Arredondar para cima
+
+    if (materiasPorPeriodo > maxMateriasPorPeriodo) {
+        printf("Nao e possivel se formar em 8 periodos. Voce precisara cursar mais de %d materias por periodo.\n", maxMateriasPorPeriodo);
+        return 0;
+    } else {
+        printf("E possivel se formar em 8 periodos.\n");
+        printf("Voce precisara cursar aproximadamente %d materias por periodo nos proximos %d periodos.\n", materiasPorPeriodo, periodosRestantes);
+        return 1;
+    }
+}
+
 int main() {
     setlocale(LC_ALL, "");
 
@@ -183,6 +286,11 @@ int main() {
     obterMateriasCursadas(materiasCursadas, &totalCursadas);
 
     int periodoAtual = obterPeriodoAtual();
+
+    if (!verificarFormaturaEm8Periodos(disciplinas, totalDisciplinas, materiasCursadas, totalCursadas, periodoAtual)) {
+        printf("Voce nao podera se formar em 8 periodos. Entre em contato com a sua coordenacao \n");
+        return 0;
+    }
 
     Disciplina disciplinasSelecionadas[100];
 

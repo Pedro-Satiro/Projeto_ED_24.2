@@ -1,0 +1,70 @@
+Regras:::
+
+limite máximo de disciplinas por semestre é 8.
+O aluno deve concluir o curso em tempo médio possível.
+nenhuma ênfase
+o aluno não deve extrapola o limite de 3 disciplinas no máximo por dia, mais deve ir todos os dias a ufal
+
+
+
+Saida:
+
+PS C:\Users\phsat\OneDrive\Documentos\UFAL\2024.2\Estrutura_de_dados\Projeto\Projeto_ED_24.2\output> & .\'projeto.exe'
+Lista de todas as materias:
+Codigo: 359 | Nome: Programacao 1 | Periodo: 1
+Codigo: 360 | Nome: Logica para Computacao | Periodo: 1
+Codigo: 361 | Nome: Computacao, Sociedade e Etica | Periodo: 1
+Codigo: 362 | Nome: Matematica Discreta | Periodo: 1
+Codigo: 363 | Nome: Calculo Diferencial e Integral | Periodo: 1
+Codigo: 364 | Nome: Estrutura de Dados | Periodo: 2
+Codigo: 365 | Nome: Banco de Dados | Periodo: 2
+Codigo: 366 | Nome: Organizacao e Arquitetura de Computadores | Periodo: 2
+Codigo: 367 | Nome: Geometria Analitica | Periodo: 2
+Codigo: 368 | Nome: Redes de Computadores | Periodo: 3
+Codigo: 369 | Nome: Teoria dos Grafos | Periodo: 3
+Codigo: 370 | Nome: Probabilidade e Estatistica | Periodo: 3
+Codigo: 371 | Nome: Algebra Linear | Periodo: 3
+Codigo: 372 | Nome: Programacao 2 | Periodo: 4
+Codigo: 373 | Nome: Programacao 3 | Periodo: 4
+Codigo: 376 | Nome: Teoria da Computacao | Periodo: 4
+Codigo: 378 | Nome: Sistemas Operacionais | Periodo: 5
+Codigo: 379 | Nome: Compiladores | Periodo: 5
+Codigo: 380 | Nome: Inteligencia Artificial | Periodo: 5
+Codigo: 381 | Nome: Computacao Grafica | Periodo: 5
+Codigo: 382 | Nome: Projeto e Desenvolvimento de Sistemas | Periodo: 6
+Codigo: 386 | Nome: Metodologia de Pesquisa e Trabalho Individual | Periodo: 7
+Codigo: 387 | Nome: Nocoes de Direito | Periodo: 7
+Digite os codigos das materias ja cursadas (digite -1 para finalizar):
+359
+362
+360
+363
+365
+366   
+367
+368
+370
+371
+372
+373
+386
+-1
+Digite o periodo atual (1 a 7): 4
+E possivel se formar em 8 periodos.
+Voce precisara cursar aproximadamente 3 materias por periodo nos proximos 4 periodos.
+Disciplinas recomendadas para o 4 periodo:
+Codigo: 361 | Nome: Computacao, Sociedade e Etica
+Codigo: 364 | Nome: Estrutura de Dados
+Codigo: 376 | Nome: Teoria da Computacao
+Digite os codigos das materias que deseja cursar (-1 para finalizar) (use 1 materia por linha):
+361
+364
+376
+-1
+Materias selecionadas:
+Codigo: 361 | Nome: Computacao, Sociedade e Etica
+Codigo: 364 | Nome: Estrutura de Dados
+Codigo: 376 | Nome: Teoria da Computacao
+Verificando se as materias selecionadas atendem as regras de alocacao...
+Erro: Nenhuma materia alocada no dia 1.
+Materias selecionadas nao atendem as regras de alocacao.
