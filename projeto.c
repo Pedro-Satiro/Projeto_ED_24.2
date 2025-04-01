@@ -9,6 +9,7 @@ typedef struct {
     int periodo;
     int prerequisitos[20];
     int totalPrerequisitos;
+    int dias[4]; // 0: segunda, 1: terca, 2: quarta, 3: quinta
 } Disciplina;
 
 void listarTodasMaterias(Disciplina disciplinas[], int totalDisciplinas) {
@@ -18,14 +19,20 @@ void listarTodasMaterias(Disciplina disciplinas[], int totalDisciplinas) {
     }
 }
 
-void selecionarMaterias(Disciplina disciplinas[], int totalDisciplinas, int periodoAtual, int materiasCursadas[], int totalCursadas) {
+void selecionarMaterias(Disciplina disciplinas[], int totalDisciplinas, int periodoAtual, int materiasCursadas[], int totalCursadas, Disciplina disciplinasSelecionadas[]) {
     printf("Disciplinas recomendadas para o %d periodo:\n", periodoAtual);
     int materiasSelecionadas[100];
     int totalSelecionadas = 0;
 
     for (int i = 0; i < totalDisciplinas; i++) {
-        if (disciplinas[i].periodo == periodoAtual) {
+        if (disciplinas[i].periodo <= periodoAtual) {
             int podeCursar = 1;
+            for (int k = 0; k < totalCursadas; k++) {
+                if (disciplinas[i].codigo == materiasCursadas[k]) {
+                    podeCursar = 0;
+                    break;
+                }
+            }
             for (int j = 0; j < disciplinas[i].totalPrerequisitos; j++) {
                 int prerequisitoAtendido = 0;
                 for (int k = 0; k < totalCursadas; k++) {
@@ -59,7 +66,7 @@ void selecionarMaterias(Disciplina disciplinas[], int totalDisciplinas, int peri
         }
         int encontrado = 0;
         for (int i = 0; i < totalDisciplinas; i++) {
-            if (disciplinas[i].codigo == codigo && disciplinas[i].periodo == periodoAtual) {
+            if (disciplinas[i].codigo == codigo && disciplinas[i].periodo <= periodoAtual) {
                 encontrado = 1;
                 materiasSelecionadas[totalSelecionadas++] = codigo;
                 break;
@@ -75,7 +82,7 @@ void selecionarMaterias(Disciplina disciplinas[], int totalDisciplinas, int peri
         for (int j = 0; j < totalDisciplinas; j++) {
             if (disciplinas[j].codigo == materiasSelecionadas[i]) {
                 printf("Codigo: %d | Nome: %s\n", disciplinas[j].codigo, disciplinas[j].nome);
-                break;
+                disciplinasSelecionadas[i] = disciplinas[j];
             }
         }
     }
@@ -109,33 +116,61 @@ int obterPeriodoAtual() {
     return periodoAtual;
 }
 
+int verificaDiasMatricula(Disciplina disciplinas[]) {
+    int dias[4] = {0, 0, 0, 0};
+
+    for (int i = 0; i < 100; i++) {
+        if (disciplinas[i].codigo == 0) {
+            break;
+        }
+        for (int j = 0; j < 4; j++) {
+            if (disciplinas[i].dias[j]) {
+                dias[j]++;
+                if (dias[j] > 3) {
+                    printf("Erro: Mais de 3 materias alocadas no mesmo dia.\n");
+                    return 0;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < 4; i++) {
+        if (dias[i] == 0) {
+            printf("Erro: Nenhuma materia alocada no dia %d.\n", i + 1);
+            return 0;
+        }
+    }
+    
+    return 1; // Retorne o valor apropriado
+}
+
 int main() {
     setlocale(LC_ALL, "");
 
     Disciplina disciplinas[] = {
-        {359, "Programacao 1", 1, {}, 0},
-        {360, "Logica para Computacao", 1, {}, 0},
-        {361, "Computacao, Sociedade e Etica", 1, {}, 0},
-        {362, "Matematica Discreta", 1, {}, 0},
-        {363, "Calculo Diferencial e Integral", 1, {}, 0},
-        {364, "Estrutura de Dados", 2, {359}, 1},
-        {365, "Banco de Dados", 2, {}, 0},
-        {366, "Organizacao e Arquitetura de Computadores", 2, {}, 0},
-        {367, "Geometria Analitica", 2, {}, 0},
-        {368, "Redes de Computadores", 3, {359}, 1},
-        {369, "Teoria dos Grafos", 3, {364, 362}, 2},
-        {370, "Probabilidade e Estatistica", 3, {363}, 1},
-        {371, "Algebra Linear", 3, {367}, 1},
-        {372, "Programacao 2", 4, {364, 365, 368}, 3},
-        {373, "Programacao 3", 4, {364, 365, 368}, 3},
-        {376, "Teoria da Computacao", 4, {}, 0},
-        {378, "Sistemas Operacionais", 5, {366}, 1},
-        {379, "Compiladores", 5, {364, 376}, 2},
-        {380, "Inteligencia Artificial", 5, {360, 364}, 2},
-        {381, "Computacao Grafica", 5, {}, 0},
-        {382, "Projeto e Desenvolvimento de Sistemas", 6, {359,360,361,362,364,365,366,367,368,369,370,371,372,373,376,378,379,380,381}, 19},
-        {386, "Metodologia de Pesquisa e Trabalho Individual", 7, {}, 0},
-        {387, "Nocoes de Direito", 7, {}, 0}
+        {359, "Programacao 1", 1, {}, 0, {1, 3}},
+        {360, "Logica para Computacao", 1, {}, 0, {0, 2}},
+        {361, "Computacao, Sociedade e Etica", 1, {}, 0, {0, 2}},
+        {362, "Matematica Discreta", 1, {}, 0, {0, 2}},
+        {363, "Calculo Diferencial e Integral", 1, {}, 0, {1, 3}},
+        {364, "Estrutura de Dados", 2, {359}, 1, {0, 2}},
+        {365, "Banco de Dados", 2, {}, 0, {1, 3}},
+        {366, "Organizacao e Arquitetura de Computadores", 2, {}, 0, {1, 3}},
+        {367, "Geometria Analitica", 2, {}, 0, {0, 2}},
+        {368, "Redes de Computadores", 3, {359}, 1, {0, 2}},
+        {369, "Teoria dos Grafos", 3, {364, 362}, 2, {0, 3}},
+        {370, "Probabilidade e Estatistica", 3, {363}, 1, {0, 2}},
+        {371, "Algebra Linear", 3, {367}, 1, {0, 2}},
+        {372, "Programacao 2", 4, {364, 365, 368}, 3, {1, 3}},
+        {373, "Programacao 3", 4, {364, 365, 368}, 3, {1, 2}},
+        {376, "Teoria da Computacao", 4, {}, 0, {0, 2}},
+        {378, "Sistemas Operacionais", 5, {366}, 1, {0, 2}},
+        {379, "Compiladores", 5, {364, 376}, 2, {0, 2}},
+        {380, "Inteligencia Artificial", 5, {360, 364}, 2, {1, 3}},
+        {381, "Computacao Grafica", 5, {}, 0, {1, 3}},
+        {382, "Projeto e Desenvolvimento de Sistemas", 6, {359,360,361,362,364,365,366,367,368,369,370,371,372,373,376,378,379,380,381}, 19, {0, 1, 2, 3}},
+        {386, "Metodologia de Pesquisa e Trabalho Individual", 7, {}, 0, {1, 3}},
+        {387, "Nocoes de Direito", 7, {}, 0, {1, 3}}
     };
 
     int totalDisciplinas = sizeof(disciplinas) / sizeof(disciplinas[0]);
@@ -149,36 +184,43 @@ int main() {
 
     int periodoAtual = obterPeriodoAtual();
 
-    selecionarMaterias(disciplinas, totalDisciplinas, periodoAtual, materiasCursadas, totalCursadas);
+    Disciplina disciplinasSelecionadas[100];
+
+    selecionarMaterias(disciplinas, totalDisciplinas, periodoAtual, materiasCursadas, totalCursadas, disciplinasSelecionadas);
+
+    printf("Verificando se as materias selecionadas atendem as regras de alocacao...\n");
+    if (verificaDiasMatricula(disciplinasSelecionadas)) {
+        printf("Materias selecionadas atendem as regras de alocacao.\n");
+    } else {
+        printf("Materias selecionadas nao atendem as regras de alocacao.\n");
+    }
 
     return 0;
 }
 
-
-
 /*
-        programação 1 - terça e quinta
-        Logica para Computacao - segunda e quarta
-        Computacao, Sociedade e Etica - segunda e quarta
-        Matematica Discreta - segunda e quarta
-        Calculo Diferencial e Integral - terça e quinta
-        Estrutura de Dados - segunda e quarta
-        Banco de Dados - terça e quinta
-        Organizacao e Arquitetura de Computadores -  terça e quinta
-        Geometria Analitica - segunda e quarta
-        Redes de Computadores - segunda e quarta
-        Teoria dos Grafos - segunda e quinta
-        Probabilidade e Estatistica - segunda e quarta
-        Algebra Linear - segunda e quarta
-        Programacao 2-  terça e quinta
-        Programacao 3 - terça e quarta
-        Teoria da Computacao - segunda e quarta
-        Sistemas Operacionais - segunda e quarta
-        Compiladores - segunda e quarta
-        Inteligencia Artificial - terça e quinta
-        Computacao Grafica  -terça e quinta
-        Projeto e Desenvolvimento de Sistemas segunda - terça, quarta e quinta
-        Metodologia de Pesquisa e Trabalho Individual -  terça e quinta
-        Nocoes de Direito   - sexta
+        programação 1 - [1, 3]
+        Logica para Computacao - [0, 2]
+        Computacao, Sociedade e Etica - [0, 2]
+        Matematica Discreta - [0, 2]
+        Calculo Diferencial e Integral - [1, 3]
+        Estrutura de Dados - [0, 2]
+        Banco de Dados - [1, 3]
+        Organizacao e Arquitetura de Computadores -  [1, 3]
+        Geometria Analitica - [0, 2]
+        Redes de Computadores - [0, 2]
+        Teoria dos Grafos - [0, 3]
+        Probabilidade e Estatistica - [0, 2]
+        Algebra Linear - [0, 2]
+        Programacao 2-  [1, 3]
+        Programacao 3 - [1, 2]
+        Teoria da Computacao - [0, 2]
+        Sistemas Operacionais - [0, 2]
+        Compiladores - [0, 2]
+        Inteligencia Artificial - [1, 3]
+        Computacao Grafica  - [1, 3]
+        Projeto e Desenvolvimento de Sistemas [0, 1, 2, 3]
+        Metodologia de Pesquisa e Trabalho Individual -  [1, 3]
+        Nocoes de Direito - [1, 3]
 
 */
