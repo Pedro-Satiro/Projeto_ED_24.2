@@ -45,8 +45,13 @@ void selecionarMaterias(Disciplina disciplinas[], int totalDisciplinas, int peri
         }
     }
 
-    printf("Digite os codigos das materias que deseja cursar (digite -1 para finalizar):\n");
+    printf("Digite os codigos das materias que deseja cursar (-1 para finalizar):\n");
     while (1) {
+        if (totalSelecionadas >= 8) {
+            printf("Voce atingiu o limite maximo de 8 materias por periodo.\n"); // 1 Regra 
+            break;
+        }
+
         int codigo;
         scanf("%d", &codigo);
         if (codigo == -1) {
@@ -83,6 +88,10 @@ void obterMateriasCursadas(int materiasCursadas[], int *totalCursadas) {
         scanf("%d", &codigo);
         if (codigo == -1) {
             break;
+        }
+        if (codigo < 359 || codigo > 390) {
+            printf("Codigo invalido. Insira o Codigo correto da diciplina.\n");
+            continue;
         }
         materiasCursadas[(*totalCursadas)++] = codigo;
     }
@@ -144,3 +153,32 @@ int main() {
 
     return 0;
 }
+
+
+
+/*
+        programação 1 terça e quinta
+        Logica para Computacao
+        Computacao, Sociedade e Etica
+        Matematica Discreta
+        Calculo Diferencial e Integral terça e quinta
+        Estrutura de Dados
+        Banco de Dados terça e quinta
+        Organizacao e Arquitetura de Computadores terça e quinta
+        Geometria Analitica
+        Redes de Computadores
+        Teoria dos Grafos
+        Probabilidade e Estatistica
+        Algebra Linear
+        Programacao 2 terça e quinta
+        Programacao 3
+        Teoria da Computacao,
+        Sistemas Operacionais
+        Compiladores
+        Inteligencia Artificial
+        Computacao Grafica
+        Projeto e Desenvolvimento de Sistemas
+        Metodologia de Pesquisa e Trabalho Individual
+        Nocoes de Direito
+
+*/
