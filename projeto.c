@@ -1,11 +1,15 @@
 /* 
 Nome : Pedro Henrique Sátiro Correia
 
+
 Regras:::
 
 limite máximo de disciplinas por semestre é 8.
+
 O aluno deve concluir o curso em tempo médio possível.
+
 nenhuma ênfase
+
 o aluno não deve extrapola o limite de 3 disciplinas no máximo por dia, mais deve ir todos os dias a ufal
 
 */ 
