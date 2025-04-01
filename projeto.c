@@ -157,28 +157,28 @@ int main() {
 
 
 /*
-        programação 1 terça e quinta
-        Logica para Computacao
-        Computacao, Sociedade e Etica
-        Matematica Discreta
-        Calculo Diferencial e Integral terça e quinta
-        Estrutura de Dados
-        Banco de Dados terça e quinta
-        Organizacao e Arquitetura de Computadores terça e quinta
-        Geometria Analitica
-        Redes de Computadores
-        Teoria dos Grafos
-        Probabilidade e Estatistica
-        Algebra Linear
-        Programacao 2 terça e quinta
-        Programacao 3
-        Teoria da Computacao,
-        Sistemas Operacionais
-        Compiladores
-        Inteligencia Artificial
-        Computacao Grafica
-        Projeto e Desenvolvimento de Sistemas
-        Metodologia de Pesquisa e Trabalho Individual
-        Nocoes de Direito
+        programação 1 - terça e quinta
+        Logica para Computacao - segunda e quarta
+        Computacao, Sociedade e Etica - segunda e quarta
+        Matematica Discreta - segunda e quarta
+        Calculo Diferencial e Integral - terça e quinta
+        Estrutura de Dados - segunda e quarta
+        Banco de Dados - terça e quinta
+        Organizacao e Arquitetura de Computadores -  terça e quinta
+        Geometria Analitica - segunda e quarta
+        Redes de Computadores - segunda e quarta
+        Teoria dos Grafos - segunda e quinta
+        Probabilidade e Estatistica - segunda e quarta
+        Algebra Linear - segunda e quarta
+        Programacao 2-  terça e quinta
+        Programacao 3 - terça e quarta
+        Teoria da Computacao - segunda e quarta
+        Sistemas Operacionais - segunda e quarta
+        Compiladores - segunda e quarta
+        Inteligencia Artificial - terça e quinta
+        Computacao Grafica  -terça e quinta
+        Projeto e Desenvolvimento de Sistemas segunda - terça, quarta e quinta
+        Metodologia de Pesquisa e Trabalho Individual -  terça e quinta
+        Nocoes de Direito   - sexta
 
 */
