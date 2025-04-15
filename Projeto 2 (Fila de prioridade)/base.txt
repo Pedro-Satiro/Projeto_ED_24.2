@@ -1,0 +1,52 @@
+fila de atendimento de um hospital
+
+20 medicos atendendo
+5 clinico geral
+15 esepcifo( pode dividir)
+
+fila de prioridade 
+(efermidades) 
+
+ORDEM DE EXECUÇÃO
+HORA CHEGADA
+TRIAGEM 
+CLASIFICAÇÃO
+ATENDIMENTO
+
+
+padrao de cores:
+#
+
+AZUL --> NÃO URGENTE -- ATE 4 H 
+Atendimento ambulatorial, sem urgência
+
+VERDE --> POUCO URGENTE -- ATE 2 H 
+Condição estável sem risco imediato
+
+AMARELO --> URGENTE -- ATE 1 H 
+ Quadro estável, mas com possibilidade de agravamento
+
+LARANJA --> MUITO URGENTE -- ATE 10 MINUTOS 
+Risco significativo se não atendido rapidamente
+
+VERMEHLO --> EMERGENCIA -- IMEDIATO 
+Risco de morte iminente
+
+#
+
+CLASIFICAÇÃO DE TRIAGEM :
+1. idade
+2. hora de chagada
+3. Possui risco de morte iminente?       sim - Vermelho, Não --LARANJA,AMARELO,VERDE,AZUL
+4. possui risco significativo de agravamento ? Sim - laranja, não --AMARELO,VERDE,AZUL
+5. situação esta estavel   sim -- amarelo ou verde não-- azul 
+6. possui risco imediato sim -- amarelo, não -- azul 
+
+Print: clasifição de cor (qual a cor?)
+print: ordem de atendimento (quantas pessoas tem na frente)
+
+
+___________________________________________
+fila deprioridade 
+estrutura 
+como inserrir alguem e como remover. 
