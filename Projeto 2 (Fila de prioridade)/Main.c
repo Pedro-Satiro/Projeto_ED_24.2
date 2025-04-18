@@ -34,7 +34,7 @@ void classificarPaciente(Paciente *paciente) {
     int riscoIminente, riscoSignificativo, estavel, riscoImediato;
 
     printf("Classificacao de triagem para %s:\n", paciente->nome);
-    printf("1. Possui risco de morte iminente? (1-Sim, 0-Não): ");
+    printf("1. Possui risco de morte iminente? (1-Sim, 0-Nao): ");
     scanf("%d", &riscoIminente);
 
     if (riscoIminente) {
@@ -42,7 +42,7 @@ void classificarPaciente(Paciente *paciente) {
         return;
     }
 
-    printf("2. Possui risco significativo de agravamento? (1-Sim, 0-Não): ");
+    printf("2. Possui risco significativo de agravamento? (1-Sim, 0-Nao): ");
     scanf("%d", &riscoSignificativo);
 
     if (riscoSignificativo) {
@@ -50,7 +50,7 @@ void classificarPaciente(Paciente *paciente) {
         return;
     }
 
-    printf("3. Situacão esta estavel? (1-Sim, 0-Não): ");
+    printf("3. Situacao esta estavel? (1-Sim, 0-Nao): ");
     scanf("%d", &estavel);
 
     if (!estavel) {
@@ -58,7 +58,7 @@ void classificarPaciente(Paciente *paciente) {
         return;
     }
 
-    printf("4. Possui risco imediato? (1-Sim, 0-Não): ");
+    printf("4. Possui risco imediato? (1-Sim, 0-Nao): ");
     scanf("%d", &riscoImediato);
 
     if (riscoImediato) {
@@ -197,7 +197,7 @@ int main() {
                 printf("Encerrando o programa.\n");
                 break;
             default:
-                printf("Opcão invalida! Tente novamente.\n");
+                printf("Opcao invalida! Tente novamente.\n");
         }
     } while (opcao != 4);
 
